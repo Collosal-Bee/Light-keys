@@ -1,0 +1,35 @@
+// index.js
+
+// Import necessary modules
+const crypto = require('crypto');
+
+// Generate a random symmetric key
+function generateKey() {
+    return crypto.randomBytes(32).toString('hex');
+}
+
+// Encrypt data using AES algorithm
+function encrypt(data, key) {
+    const cipher = crypto.createCipher('aes-256-cbc', key);
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+}
+
+// Decrypt data using AES algorithm
+function decrypt(encryptedData, key) {
+    const decipher = crypto.createDecipher('aes-256-cbc', key);
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
+
+// Example usage
+const key = generateKey();
+const originalData = 'Hello, world!';
+const encryptedData = encrypt(originalData, key);
+const decryptedData = decrypt(encryptedData, key);
+
+console.log('Original data:', originalData);
+console.log('Encrypted data:', encryptedData);
+console.log('Decrypted data:', decryptedData);
